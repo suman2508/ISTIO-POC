@@ -35,7 +35,7 @@ spec:
     - destination:
         host: "cards-dm-apigw-svc"
         port:
-          number: 8081
+          number: 8082
       headers:
         request:
           set:
