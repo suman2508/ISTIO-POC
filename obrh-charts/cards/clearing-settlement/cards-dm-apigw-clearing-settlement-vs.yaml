@@ -1,27 +1,44 @@
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+---
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "VirtualService"
 metadata:
-  name: cards-dm-apigw-debitcard-information-vs
-  namespace: cards-dm-apigw-{{ .Values.Environment }}-ns
+  name: "cards-dm-apigw-debitcard-information-vs"
+  namespace: "cards-dm-apigw-{{ .Values.Environment }}-ns"
 spec:
   hosts:
-   - "*"
+  - "*"
   gateways:
-  - cards-dm-apigw-istio-gw
+  - "cards-dm-apigw-istio-gw"
   http:
   - match:
     - uri:
-        exact: /dummyentry
+        exact: "/dummyentry"
     rewrite:
-      uri: /api-gateway/cards-dm-debitcard-information-cmc-obrh-services/route/dispatch
+      uri: "/api-gateway/cards-dm-debitcard-information-cmc-obrh-services/route/dispatch"
     route:
     - destination:
-        host: cards-dm-apigw-svc
+        host: "cards-dm-apigw-svc"
         port:
           number: 8081
       headers:
         request:
           add:
-            SERVICE-CONSUMER: DUMMY-SERVICE-CONSUMER
-            SERVICE-CONSUMER-SERVICE: DUMMY-SERVICE-CONSUMER-SERVICE
-            REQUEST-URL: /dummyentry
+            SERVICE-CONSUMER: "DUMMY-SERVICE-CONSUMER"
+            SERVICE-CONSUMER-SERVICE: "DUMMY-SERVICE-CONSUMER-SERVICE"
+            REQUEST-URL: "/dummyentry"
+  - match:
+    - uri:
+        exact: "/cards/clearing-settlement/v1/updatePOSSerialNumber"
+    rewrite:
+      uri: "/api-gateway/cards-dm-clearing-settlement-cmc-obrh-services/route/dispatch"
+    route:
+    - destination:
+        host: "cards-dm-apigw-svc"
+        port:
+          number: 8081
+      headers:
+        request:
+          set:
+            REQUEST-URL: "/cards/clearing-settlement/v1/updatePOSSerialNumber"
+            SERVICE-CONSUMER: "HDFC_OBP_SERVICE_CONSUMER"
+            SERVICE-CONSUMER-SERVICE: "cards-updatePOSSerialNumber-v5"
