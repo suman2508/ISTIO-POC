@@ -17,3 +17,19 @@ spec:
             REQUEST-URL: "/cards/clearing-settlement/v3/updatePOSSerialNumber"
             SERVICE-CONSUMER: "HDFC_OBP_SERVICE_CONSUMER"
             SERVICE-CONSUMER-SERVICE: "cards-updatePOSSerialNumber-v3"
+  - match:
+    - uri:
+        exact: "/cards/clearing-settlement/v3/updatePOSSerialNumber"
+    rewrite:
+      uri: "/api-gateway/cards-dm-clearing-settlement-cmc-obrh-services/route/dispatch"
+    route:
+    - destination:
+        host: "cards-dm-apigw-svc"
+        port:
+          number: 8081
+      headers:
+        request:
+          set:
+            REQUEST-URL: "/cards/clearing-settlement/v3/updatePOSSerialNumber"
+            SERVICE-CONSUMER: "HDFC_OBP_SERVICE_CONSUMER"
+            SERVICE-CONSUMER-SERVICE: "cards-updatePOSSerialNumber-v3"
